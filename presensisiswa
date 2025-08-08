@@ -1,0 +1,55 @@
+function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Sheet1");
+  var data = JSON.parse(e.postData.contents);
+  
+  sheet.appendRow([new Date(), data.nama, data.kelas, new Date().toLocaleTimeString()]);
+  
+  return ContentService.createTextOutput("Presensi berhasil");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presensi Online</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h2>Form Presensi</h2>
+    <form id="presensiForm">
+        <label>Nama:</label><br>
+        <input type="text" id="nama" required><br><br>
+        <label>Kelas:</label><br>
+        <input type="text" id="kelas" required><br><br>
+        <button type="submit">Kirim Presensi</button>
+    </form>
+
+    <p id="status"></p>
+
+    <script>
+        const scriptURL = "MASUKKAN_URL_GOOGLE_APPS_SCRIPT";
+
+        document.getElementById("presensiForm").addEventListener("submit", function(e){
+            e.preventDefault();
+            let data = {
+                nama: document.getElementById("nama").value,
+                kelas: document.getElementById("kelas").value
+            };
+
+            fetch(scriptURL, {
+                method: "POST",
+                body: JSON.stringify(data)
+            }).then(res => {
+                document.getElementById("status").innerText = "Presensi berhasil!";
+            }).catch(err => {
+                document.getElementById("status").innerText = "Gagal mengirim data!";
+            });
+        });
+    </script>
+</body>
+</html>
+git init
+git add .
+git commit -m "Presensi Online"
+git branch -M main
+git remote add origin https://github.com/username/presensi-online.git
+git push -u origin main
